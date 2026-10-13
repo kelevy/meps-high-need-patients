@@ -20,7 +20,7 @@ import pandas as pd
 SUPPORTED = {".csv", ".dta", ".sas7bdat", ".xpt"}
 
 
-def read_any(path: Path) -> pd.DataFrame:
+def read_any(path: Path):
     """Read one data file into a DataFrame, based on its extension."""
     suffix = path.suffix.lower()
     if suffix == ".csv":
@@ -34,7 +34,7 @@ def read_any(path: Path) -> pd.DataFrame:
     raise ValueError(f"Unsupported file type: {path.name} (supported: {sorted(SUPPORTED)})")
 
 
-def normalise_columns(df: pd.DataFrame) -> pd.DataFrame:
+def normalise_columns(df: pd.DataFrame)
     """Strip and lower-case column names; refuse to silently merge columns that collide."""
     out = df.copy()
     out.columns = [str(c).strip().lower() for c in out.columns]
@@ -44,13 +44,13 @@ def normalise_columns(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def output_path(src: Path, raw_root: Path, out_root: Path) -> Path:
+def output_path(src: Path, raw_root: Path, out_root: Path):
     """data/raw/<year>/<name>.<ext>  ->  data/processed/<year>/<name>.parquet"""
     rel = src.relative_to(raw_root)
     return (out_root / rel).with_suffix(".parquet")
 
 
-def convert_file(src: Path, dst: Path) -> int:
+def convert_file(src: Path, dst: Path):
     """Convert one file; returns the number of rows written."""
     df = normalise_columns(read_any(src))
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -63,7 +63,7 @@ def convert_file(src: Path, dst: Path) -> int:
     return len(df)
 
 
-def main() -> None:
+def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("--raw", type=Path, default=Path("data/raw"))
     parser.add_argument("--out", type=Path, default=Path("data/processed"))
